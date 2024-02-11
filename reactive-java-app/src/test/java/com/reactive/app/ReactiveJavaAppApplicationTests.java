@@ -20,9 +20,12 @@ class ReactiveJavaAppApplicationTests {
 		
 		//mono--publisher whixh will return 0 or 1
 		//created mono
-		Mono<String> mono= Mono
-				.just("learning reactive java")
+		Mono<Object> monoErro=	Mono
+				.error(new RuntimeException("Throwing an Error...."))
 				.log();
+		Mono<Object> mono= Mono
+				.just("learning reactive java")
+				.log().then(monoErro);
 		
 		/* Consumed Mono
 		 * mono.subscribe(new Consumer<String>() {
@@ -39,11 +42,9 @@ class ReactiveJavaAppApplicationTests {
 		//mono.subscribe(System.out::println);
 	
 	
-	Mono<Object> monoErro=	Mono
-			.error(new RuntimeException("Throwing an Error...."))
-			.log();
+
 	
-	monoErro.subscribe(System.out::println);
+	//monoErro.subscribe(System.out::println);
 	}
 
 }
