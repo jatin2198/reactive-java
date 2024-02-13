@@ -1,5 +1,6 @@
 package com.reactive.app;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -19,7 +20,7 @@ class ReactiveJavaAppApplicationTests {
 	}
 
 	@Test
-	void workWithMono() {
+	void workWithMono() throws InterruptedException {
 
 		/*
 		 * //mono--publisher whixh will return 0 or 1 //created mono Mono<Object>
@@ -60,15 +61,29 @@ class ReactiveJavaAppApplicationTests {
 	 * System.out.println("Consumed from m1= "+data.getT1());
 	 * System.out.println("Consumed from m2= "+data.getT2()); });
 	 */
-			m1.map(item->item.toUpperCase()).subscribe(System.out::println);
-			
-			m1.flatMap(valueM1->Mono.just(valueM1.split(" "))).subscribe(item->{
-				Arrays.asList(item).forEach(values->System.out.println(values));
-			});
-			
-		Flux<String> f1=m1.flatMapMany(valueM1->Flux.just(valueM1.split(" "))).log();
+	/*
+	 * m1.map(item->item.toUpperCase()).subscribe(System.out::println);
+	 * 
+	 * m1.flatMap(valueM1->Mono.just(valueM1.split(" "))).subscribe(item->{
+	 * Arrays.asList(item).forEach(values->System.out.println(values)); });
+	 * 
+	 * Flux<String> f1=m1.flatMapMany(valueM1->Flux.just(valueM1.split(" "))).log();
+	 * 
+	 * f1.subscribe(data->System.out.println("data from Flux----->"+data));
+	 */
 		
-		f1.subscribe(data->System.out.println("data from Flux----->"+data));
+		System.out.println("Start Thread Name= "+Thread.currentThread().getName());
+	Flux<String> flux=m1.concatWith(m2).log().delayElements(Duration.ofMillis(2000));
+	
+	flux.subscribe(fluxdata->{
+		
+		System.out.println("Current thread name = "+Thread.currentThread().getName());
+	System.out.println(fluxdata);
+	});
+	
+	Thread.currentThread().sleep(5000);
+	System.out.println("Ternating Thread name= "+Thread.currentThread().getName());
+	
 	}
 
 }
