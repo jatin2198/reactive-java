@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.reactive.app.entities.NovelEntity;
@@ -44,7 +45,7 @@ public class NovelController {
 		
 	}
 	
-	@PutMapping("/updata")
+	@PutMapping("/update")
 	public Mono<NovelEntity> updatenovelInfo(@RequestBody NovelEntity entity){
 		return novelServices.updateNovelInfo(entity, entity.getNovelId());
 		
@@ -53,6 +54,12 @@ public class NovelController {
 	@DeleteMapping("/deleteById/{id}")
 	public Mono<Void> deletenovelInfo(@PathVariable int id){
 		return novelServices.deleteNovel(id);
+		
+	}
+	
+	@GetMapping("/search")
+	public Flux<NovelEntity> searchByNamePatter(@RequestParam("query") String name){
+		return novelServices.searchNovel(name);
 		
 	}
 }

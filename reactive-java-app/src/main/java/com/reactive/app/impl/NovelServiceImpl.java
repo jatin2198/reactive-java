@@ -57,7 +57,7 @@ return	oldnovel.flatMap(book->{
 	@Override
 	public Flux<NovelEntity> searchNovel(String query) {
 		// TODO Auto-generated method stub
-		return null;
+		return novelRepository.searchByName("%"+query+"%");
 	}
 
 }
